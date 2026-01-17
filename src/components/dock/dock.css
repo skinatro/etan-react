@@ -1,38 +1,53 @@
+/* This is the wrapper that stays fixed on screen */
 .dock-outer {
-  margin: 0 0.5rem;
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  right: 0;
   display: flex;
-  max-width: 100%;
+  justify-content: center;
   align-items: center;
+  z-index: 9999; /* Higher than all other layers */
+  pointer-events: none; /* Allows mouse to pass through the empty space */
 }
 
+/* The actual bar holding the icons */
 .dock-panel {
-  position: absolute;
-  bottom: 0.5rem;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
   align-items: flex-end;
   width: fit-content;
-  gap: 1rem;
-  border-radius: 1rem;
-  background-color: #060010;
-  border: 1px solid #222;
-  padding: 0 0.5rem 0.5rem;
+  gap: 12px;
+  border-radius: 24px;
+  background: rgba(15, 23, 42, 0.8); /* Dark Glass */
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px 15px;
+  pointer-events: auto; /* Re-enables mouse for icons */
 }
 
 .dock-item {
   position: relative;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
-  background-color: #060010;
-  border: 1px solid #222;
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
   cursor: pointer;
   outline: none;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.dock-item:hover {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: #8b5cf6;
+}
+
+/* Style for your Register button specifically */
+.dock-register {
+  background: linear-gradient(135deg, #f97316, #ef4444) !important;
+  border: none !important;
 }
 
 .dock-icon {
@@ -43,15 +58,16 @@
 
 .dock-label {
   position: absolute;
-  top: -1.5rem;
+  top: -45px;
   left: 50%;
-  width: fit-content;
-  white-space: pre;
-  border-radius: 0.375rem;
-  border: 1px solid #222;
-  background-color: #060010;
-  padding: 0.125rem 0.5rem;
-  font-size: 0.75rem;
-  color: #fff;
   transform: translateX(-50%);
+  background: #8b5cf6;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
