@@ -1,0 +1,38 @@
+name: NPM CI and CD to OCI
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    #CI
+    - name: Get code
+    - uses: actions/checkout@v6
+      with:
+          fetch-depth: 0
+    
+    - name: Setup Node
+      uses: actions/setup-node@v6
+      with:
+        node-version: 25
+        cache: 'npm'
+        cache-dependency-path: package-lock.json
+    - run: npm ci
+    - run: npm test
+
+    - run: npm run build
+    #FUTURE: Maybe add Lighthouse testing
+    
+    # CD
+    - name: Send files to server
+      uses: appleboy/scp-action@v1
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        source: build/
+        target: ~/mirage
