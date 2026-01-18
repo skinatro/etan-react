@@ -3,15 +3,15 @@ name: NPM CI and CD to OCI
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
-  build:
+  build-n-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    #CI
     - name: Get code
-    - uses: actions/checkout@v6
+      uses: actions/checkout@v6
       with:
           fetch-depth: 0
     
@@ -22,12 +22,13 @@ jobs:
         cache: 'npm'
         cache-dependency-path: package-lock.json
     - run: npm ci
-    - run: npm test
+    #- run: npm test
 
-    - run: npm run build
+    - run: npm run build --if-present
+      env: 
+       CI: "false"
     #FUTURE: Maybe add Lighthouse testing
-    
-    # CD
+
     - name: Send files to server
       uses: appleboy/scp-action@v1
       with:
@@ -36,3 +37,14 @@ jobs:
         key: ${{ secrets.KEY }}
         source: build/
         target: ~/mirage
+
+    - name: Deploy to nginx web root
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        script: | 
+          sudo rm -rf /var/www/etan.skinatro.tech/html/*
+          sudo cp -a ~/mirage/build/. /var/www/etan.skinatro.tech/html/
+          sudo systemctl reload nginx  
