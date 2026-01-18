@@ -25,6 +25,8 @@ jobs:
     #- run: npm test
 
     - run: npm run build --if-present
+      env: 
+       CI: "false"
     #FUTURE: Maybe add Lighthouse testing
     
     # CD
