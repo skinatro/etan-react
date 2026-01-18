@@ -5,11 +5,10 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  build-n-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    #CI
     - name: Get code
       uses: actions/checkout@v6
       with:
@@ -28,8 +27,7 @@ jobs:
       env: 
        CI: "false"
     #FUTURE: Maybe add Lighthouse testing
-    
-    # CD
+
     - name: Send files to server
       uses: appleboy/scp-action@v1
       with:
@@ -38,3 +36,13 @@ jobs:
         key: ${{ secrets.KEY }}
         source: build/
         target: ~/mirage
+
+    - name: Deploy to nginx web root
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        script: |
+          sudo rsync -a --delete ~/build/dist/ /var/www/etan.skinatro.tech/html/
+          sudo systemctl reload nginx  
