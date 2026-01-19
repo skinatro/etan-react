@@ -75,22 +75,22 @@ function RegisterForm() {
 
               {/* Email */}
       <div className="field">
-        <label htmlFor="email">Email</label>
+        <label htmlFor="email">Student Email: </label>
         <input
           id="email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter Email"
+          placeholder="abc@student.sfit.ac.in"
         />
       </div>
 
       {/* PID */}
       <div className="field">
-        <label htmlFor="pid">PID</label>
+        <label htmlFor="pid">PID: </label>
         <input
           id="pid"
-          type="text"
+          type="number"
           value={PID}
           onChange={(e) => setPID(e.target.value)}
           placeholder="Enter PID"
@@ -99,19 +99,19 @@ function RegisterForm() {
 
       {/* Year */}
       <div className="field">
-        <label htmlFor="year">Year</label>
+        <label htmlFor="year">Year: </label>
         <input
           id="year"
           type="text"
           value={year}
           onChange={(e) => setYear(e.target.value)}
-          placeholder="Enter Year"
+          placeholder="F.E / S.E / T.E / B.E"
         />
       </div>
 
       {/* Branch */}
       <div className="field">
-        <label htmlFor="branch">Branch</label>
+        <label htmlFor="branch">Branch: </label>
         <input
           id="branch"
           type="text"
@@ -123,13 +123,12 @@ function RegisterForm() {
 
       {/* Payment Proof */}
       <div className="field">
-        <label htmlFor="payment">Payment Proof</label>
+        <label htmlFor="payment">Payment Proof (PDF / Image): </label>
         <input
           id="payment"
-          type="text"
-          value={payment_proof}
-          onChange={(e) => setPayment_proof(e.target.value)}
-          placeholder="Transaction / UPI Ref ID"
+          type="file"
+          accept="application/pdf,image/*"
+          onChange={(e) => setPayment_proof(e.target.files[0])}
         />
       </div>
 
