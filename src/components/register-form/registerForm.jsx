@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import './registerForm.css';
 //test google form
 //https://docs.google.com/forms/u/0/d/e/1FAIpQLSfTnMFkGoFZ1bQCGAHTP0XAydbNyzlrvFdKuEPi4S_RUY2KWQ/formResponse
@@ -15,6 +15,17 @@ function RegisterForm({ onClose }) {
   const [PID, setPID] = useState("");
   const [payment_proof, setPayment_proof] = useState("");
 
+  useEffect(() => {
+    window.gapi.load('client:auth2', () => {
+      window.gapi.client.init({
+        apiKey: 'YOUR_API_KEY', // Replace with your API key
+        clientId: 'YOUR_CLIENT_ID', // Replace with your OAuth client ID
+        discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
+        scope: 'https://www.googleapis.com/auth/drive.file'
+      });
+    });
+  }, []);
+
   return (
 
       <div className="register-page">
@@ -22,7 +33,7 @@ function RegisterForm({ onClose }) {
             ✕
           </button>
       <form
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
 
           //adding data into formData
@@ -43,8 +54,29 @@ function RegisterForm({ onClose }) {
           //question-5 (email)
           formData.append("entry.24007369", branch);
 
-          //question-6 (email)
-          formData.append("entry.1901115713", payment_proof);
+          // Upload payment proof to Google Drive
+          if (payment_proof) {
+            const authInstance = window.gapi.auth2.getAuthInstance();
+            if (!authInstance.isSignedIn.get()) {
+              await authInstance.signIn();
+            }
+            const accessToken = authInstance.currentUser.get().getAuthResponse().access_token;
+            const metadata = {
+              name: payment_proof.name,
+              parents: ['YOUR_FOLDER_ID'] // Replace with your Google Drive folder ID
+            };
+            const formDataUpload = new FormData();
+            formDataUpload.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+            formDataUpload.append('file', payment_proof);
+            await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+              method: 'POST',
+              headers: {
+                Authorization: `Bearer ${accessToken}`
+              },
+              body: formDataUpload
+            });
+          }
+
           //POST req sent to google form.
           fetch(
             "https://docs.google.com/forms/d/e/1FAIpQLScJxB5X1ig6-73qpKK9-PJhJEVCfus9w_YTA0VTDs8z-p_rQQ/formResponse",
