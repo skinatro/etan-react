@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import './registerForm.css';
 //test google form
 //https://docs.google.com/forms/u/0/d/e/1FAIpQLSfTnMFkGoFZ1bQCGAHTP0XAydbNyzlrvFdKuEPi4S_RUY2KWQ/formResponse
@@ -7,7 +7,7 @@ import './registerForm.css';
 //ID for mobile number - entry.1385615279
 //ID for Email - entry.1775302109
 
-function RegisterForm() {
+function RegisterForm({ onClose }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [branch, setBranch] = useState("");
@@ -15,9 +15,25 @@ function RegisterForm() {
   const [PID, setPID] = useState("");
   const [payment_proof, setPayment_proof] = useState("");
 
+  useEffect(() => {
+    window.gapi.load('client:auth2', () => {
+      window.gapi.client.init({
+        apiKey: 'YOUR_API_KEY', // Replace with your API key
+        clientId: 'YOUR_CLIENT_ID', // Replace with your OAuth client ID
+        discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
+        scope: 'https://www.googleapis.com/auth/drive.file'
+      });
+    });
+  }, []);
+
   return (
+
+      <div className="register-page">
+          <button className="register-close" onClick={onClose}>
+            ✕
+          </button>
       <form
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
 
           //adding data into formData
@@ -38,8 +54,29 @@ function RegisterForm() {
           //question-5 (email)
           formData.append("entry.24007369", branch);
 
-          //question-6 (email)
-          formData.append("entry.1901115713", payment_proof);
+          // Upload payment proof to Google Drive
+          if (payment_proof) {
+            const authInstance = window.gapi.auth2.getAuthInstance();
+            if (!authInstance.isSignedIn.get()) {
+              await authInstance.signIn();
+            }
+            const accessToken = authInstance.currentUser.get().getAuthResponse().access_token;
+            const metadata = {
+              name: payment_proof.name,
+              parents: ['YOUR_FOLDER_ID'] // Replace with your Google Drive folder ID
+            };
+            const formDataUpload = new FormData();
+            formDataUpload.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+            formDataUpload.append('file', payment_proof);
+            await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+              method: 'POST',
+              headers: {
+                Authorization: `Bearer ${accessToken}`
+              },
+              body: formDataUpload
+            });
+          }
+
           //POST req sent to google form.
           fetch(
             "https://docs.google.com/forms/d/e/1FAIpQLScJxB5X1ig6-73qpKK9-PJhJEVCfus9w_YTA0VTDs8z-p_rQQ/formResponse",
@@ -75,22 +112,22 @@ function RegisterForm() {
 
               {/* Email */}
       <div className="field">
-        <label htmlFor="email">Email</label>
+        <label htmlFor="email">Student Email: </label>
         <input
           id="email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter Email"
+          placeholder="abc@student.sfit.ac.in"
         />
       </div>
 
       {/* PID */}
       <div className="field">
-        <label htmlFor="pid">PID</label>
+        <label htmlFor="pid">PID: </label>
         <input
           id="pid"
-          type="text"
+          type="number"
           value={PID}
           onChange={(e) => setPID(e.target.value)}
           placeholder="Enter PID"
@@ -99,19 +136,19 @@ function RegisterForm() {
 
       {/* Year */}
       <div className="field">
-        <label htmlFor="year">Year</label>
+        <label htmlFor="year">Year: </label>
         <input
           id="year"
           type="text"
           value={year}
           onChange={(e) => setYear(e.target.value)}
-          placeholder="Enter Year"
+          placeholder="F.E / S.E / T.E / B.E"
         />
       </div>
 
       {/* Branch */}
       <div className="field">
-        <label htmlFor="branch">Branch</label>
+        <label htmlFor="branch">Branch: </label>
         <input
           id="branch"
           type="text"
@@ -123,13 +160,12 @@ function RegisterForm() {
 
       {/* Payment Proof */}
       <div className="field">
-        <label htmlFor="payment">Payment Proof</label>
+        <label htmlFor="payment">Payment Proof (PDF / Image): </label>
         <input
           id="payment"
-          type="text"
-          value={payment_proof}
-          onChange={(e) => setPayment_proof(e.target.value)}
-          placeholder="Transaction / UPI Ref ID"
+          type="file"
+          accept="application/pdf,image/*"
+          onChange={(e) => setPayment_proof(e.target.files[0])}
         />
       </div>
 
@@ -140,6 +176,7 @@ function RegisterForm() {
           Submit
         </button>
       </form>
+      </div>
   );
 }
 

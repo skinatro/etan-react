@@ -1,27 +1,35 @@
 import React from 'react';
 import FloatingLines from './components/floating-lines/FloatingLines';
 import Dock from './components/dock/dock';
+import RegisterForm from './components/register-form/registerForm';
+import { useState } from 'react';
 import './App.css';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import Team from "./components/team-page/Team";
+import { Routes, Route, useNavigate } from "react-router-dom";
 
 import {
-  VscHome, VscInfo, VscCalendar, VscFiles,
-  VscOrganization, VscMail, VscEdit
+  VscHome, VscCalendar, VscFiles,
+  VscOrganization, VscEdit
 } from 'react-icons/vsc';
 
 function App() {
+  const [showRegister, setShowRegister] = useState(false);
+  const navigate = useNavigate();
+
+  const openRegister = () => setShowRegister(true);
+  const closeRegister = () => setShowRegister(false);
+
   const navItems = [
-    { icon: <VscHome size={22} />, label: 'Home', onClick: () => window.scrollTo({ top: 0, behavior: 'smooth' }) },
-    { icon: <VscInfo size={22} />, label: 'About', onClick: () => console.log('About clicked') },
+    { icon: <VscHome size={22} />, label: 'Home', onClick: () => navigate("/") },
     { icon: <VscCalendar size={22} />, label: 'Events', onClick: () => console.log('Events clicked') },
     { icon: <VscFiles size={22} />, label: 'Gallery', onClick: () => console.log('Gallery clicked') },
-    { icon: <VscOrganization size={22} />, label: 'Team', onClick: () => console.log('Team clicked') },
-    { icon: <VscMail size={22} />, label: 'Contact', onClick: () => console.log('Contact clicked') },
-    { icon: <VscEdit size={22} />, label: 'Register', onClick: () => console.log('Register clicked'), className: 'dock-register' },
+    { icon: <VscOrganization size={22} />, label: 'Team', onClick: () => navigate("/team") },
+    { icon: <VscEdit size={22} />, label: 'Register', onClick: openRegister, className: 'dock-register' },
   ];
 
-
   const { scrollYProgress } = useScroll();
+  
 
   /*
     Events starts coming up when user is
@@ -37,23 +45,32 @@ function App() {
   return (
     <div className="app-wrapper">
       <div className="bg-layer">
-<FloatingLines
-linesGradient={["#34D399", "#06B6D4", "#8B5CF6", "#afacac"]}
-// Green → Cyan → Purple → Pink
-  enabledWaves={['middle', 'bottom']}
-  lineCount={[15, 15]}
-  lineDistance={[8,8]}
-  bottomWavePosition={{ x: 0, y: -1.5, rotate: 1.85 }}
-  middleWavePosition={{ x: 2, y: 1.5, rotate: 1.85 }}
-  animationSpeed={3.3}
-  parallaxStrength={0.5}
-  interactive={true}
-  bendStrength={-3}
-/>
+        <FloatingLines
+        linesGradient={["#34D399", "#06B6D4", "#8B5CF6", "#afacac"]}
+        // Green → Cyan → Purple → Pink
+          enabledWaves={['middle', 'bottom']}
+          lineCount={[15, 15]}
+          lineDistance={[8,8]}
+          bottomWavePosition={{ x: 0, y: -1.5, rotate: 1.85 }}
+          middleWavePosition={{ x: 2, y: 1.5, rotate: 1.85 }}
+          animationSpeed={3.3}
+          parallaxStrength={0.5}
+          interactive={true}
+          bendStrength={-3}
+        />
       </div>
+
+
+        {showRegister && <RegisterForm onClose={closeRegister} />}
+
 
       <div className="content-layer">
         <main className="container">
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <>
           {/* Hero Section */}
           <section className="about-hero">
             <div className="logo-placeholder" style={{ marginBottom: '20px', fontSize: '2rem' }}>
@@ -121,6 +138,7 @@ linesGradient={["#34D399", "#06B6D4", "#8B5CF6", "#afacac"]}
           >
             <div className="events-inner">
               <div className="section-header">
+
                 <h1>Upcoming <span>Events</span></h1>
                 <p className="subtitle">
                   Join us for exciting workshops, hackathons, and networking opportunities
@@ -197,7 +215,12 @@ linesGradient={["#34D399", "#06B6D4", "#8B5CF6", "#afacac"]}
               <div style={{ height: '15vh' }} />
             </div>
           </motion.section>
-
+          </>
+              }
+              />
+              
+          <Route path="/team" element={<Team />} />
+          </Routes>
         </main>
 
         {/* The Floating Dock */}

@@ -105,3 +105,49 @@ form button:active {
   position: static;
   z-index: auto;
 }
+
+.register-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 2000;
+  background: rgba(0, 0, 0, 0.116);
+  backdrop-filter: blur(20px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  color: #000;
+
+  font-size: 20px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.register-close:hover {
+  background: white;
+  transform: scale(1.1);
+}
+
+.register-close:active {
+  transform: scale(0.95);
+}
