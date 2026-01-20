@@ -7,7 +7,7 @@ import './registerForm.css';
 //ID for mobile number - entry.1385615279
 //ID for Email - entry.1775302109
 
-function RegisterForm() {
+function RegisterForm({ onClose }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [branch, setBranch] = useState("");
@@ -16,6 +16,11 @@ function RegisterForm() {
   const [payment_proof, setPayment_proof] = useState("");
 
   return (
+
+      <div className="register-page">
+          <button className="register-close" onClick={onClose}>
+            ✕
+          </button>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -139,6 +144,7 @@ function RegisterForm() {
           Submit
         </button>
       </form>
+      </div>
   );
 }
 
