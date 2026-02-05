@@ -8,6 +8,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import Team from "./components/team-page/Team";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
+
 import {
   VscHome, VscCalendar, VscFiles,
   VscOrganization, VscEdit
