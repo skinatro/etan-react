@@ -4,6 +4,7 @@ import sfit_build_nobkg from './assets/home-page/sfit-build-nobkg.png'
 import sky from './assets/home-page/sky.jpg'
 import etan_text from './assets/home-page/etan-text.png'
 import Dock from './components/dock/dock';
+import Store from './components/store-page/Store'; //dintd get y but theres an error redlined here 
 import Team from "./components/team-page/Team";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
@@ -14,7 +15,7 @@ import {
 
 import { FaInstagram, FaLinkedin } from 'react-icons/fa';
 import { MdEmail, MdLocationOn } from 'react-icons/md';
-
+import { RiStore2Line } from "react-icons/ri";
 function App() {
   const buildingRef = useRef(null)
   const textRef = useRef(null)
@@ -27,6 +28,7 @@ function App() {
       { icon: <VscCalendar size={22} />, label: 'Events', onClick: () => console.log('Events clicked') },
       { icon: <VscFiles size={22} />, label: 'Gallery', onClick: () => console.log('Gallery clicked') },
       { icon: <VscOrganization size={22} />, label: 'Team', onClick: () => navigate("/team") },
+      { icon: <RiStore2Line size={22} />, label: 'Store', onClick: () => navigate("/store") },
     ];
 
    // Right dock - Contact/Social items
@@ -128,6 +130,7 @@ function App() {
             }/>
 
             <Route path="/team" element={<Team />} />
+            <Route path="/store" element={<Store />} />
           </Routes>
       
       {/* Left Dock - Navigation */}
