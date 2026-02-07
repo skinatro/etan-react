@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import './App.css';
-import FloatingLines from './components/floating-lines/floatingLines';
+import './About.css';
+import FloatingLines from './components/floating-lines/FloatingLines';
 import Stack from "./components/gallery-stack/GalleryStack";
 
 import img1 from "./assets/gallery/gallery1.jpg";

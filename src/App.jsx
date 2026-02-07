@@ -1,234 +1,129 @@
-import React from 'react';
-import FloatingLines from './components/floating-lines/FloatingLines';
+import { useEffect, useRef } from 'react'
+import './App.css'
+import sfit_build_nobkg from './assets/home-page/sfit-build-nobkg.png'
+import sky from './assets/home-page/sky.jpg'
+import etan_text from './assets/home-page/etan-text.png'
 import Dock from './components/dock/dock';
-import RegisterForm from './components/register-form/registerForm';
-import { useState } from 'react';
-import './App.css';
-import { motion, useScroll, useTransform } from 'framer-motion';
 import Team from "./components/team-page/Team";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
-
 import {
   VscHome, VscCalendar, VscFiles,
-  VscOrganization, VscEdit
+  VscOrganization
 } from 'react-icons/vsc';
 
+import { FaInstagram, FaLinkedin } from 'react-icons/fa';
+import { MdEmail, MdLocationOn } from 'react-icons/md';
+
 function App() {
-  const [showRegister, setShowRegister] = useState(false);
+  const buildingRef = useRef(null)
+  const textRef = useRef(null)
+  const scrollIndicatorRef = useRef(null)
+
   const navigate = useNavigate();
 
-  const openRegister = () => setShowRegister(true);
-  const closeRegister = () => setShowRegister(false);
-
   const navItems = [
-    { icon: <VscHome size={22} />, label: 'Home', onClick: () => navigate("/") },
-    { icon: <VscCalendar size={22} />, label: 'Events', onClick: () => console.log('Events clicked') },
-    { icon: <VscFiles size={22} />, label: 'Gallery', onClick: () => console.log('Gallery clicked') },
-    { icon: <VscOrganization size={22} />, label: 'Team', onClick: () => navigate("/team") },
-    { icon: <VscEdit size={22} />, label: 'Register', onClick: openRegister, className: 'dock-register' },
+      { icon: <VscHome size={22} />, label: 'Home', onClick: () => navigate("/") },
+      { icon: <VscCalendar size={22} />, label: 'Events', onClick: () => console.log('Events clicked') },
+      { icon: <VscFiles size={22} />, label: 'Gallery', onClick: () => console.log('Gallery clicked') },
+      { icon: <VscOrganization size={22} />, label: 'Team', onClick: () => navigate("/team") },
+    ];
+
+   // Right dock - Contact/Social items
+  const contactItems = [
+    { icon: <FaInstagram size={22} />, label: 'Instagram', onClick: () => window.open('https://www.instagram.com/etan_sfit/', '_blank') },
+    { icon: <FaLinkedin size={22} />, label: 'LinkedIn', onClick: () => window.open('https://www.linkedin.com/company/etan-sfit/', '_blank') },
+    { icon: <MdEmail size={22} />, label: 'Email', onClick: () => window.location.href = 'mailto:etan@sfit.ac.in' },
+    { icon: <MdLocationOn size={22} />, label: 'Location', onClick: () => window.open('https://maps.app.goo.gl/XV3PUBU3ASCFC6Tz9?g_st=aw', '_blank') },
   ];
 
-  const { scrollYProgress } = useScroll();
-  
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrolled = window.scrollY
+      const maxScroll = window.innerHeight * 0.65 // Adjust this to control how far user can scroll
+      
+      // Clamp scroll value
+      const effectiveScroll = Math.min(scrolled, maxScroll)
+      
+      // Move building up from bottom as user scrolls
+      if (buildingRef.current) {
+        // Start from bottom (translateY(100%)) and move to final position
+        const buildingProgress = effectiveScroll / maxScroll
+        const buildingTranslate = 100 - (buildingProgress * 100) // 100% to 0%
+        buildingRef.current.style.transform = `translateX(-50%) translateY(${buildingTranslate}%)`
+      }
+      
+      // Move text up (but less than building) while keeping it centered
+      if (textRef.current) {
+        // Text moves up but not as much as building
+        const textTranslate = -(effectiveScroll * 0.55) // Adjust multiplier for text speed
+        textRef.current.style.transform = `translate(-50%, calc(-50% + ${textTranslate}px))`
+      }
+      
+      // Move scroll indicator down and fade out when scrolled ~80-90%
+      if (scrollIndicatorRef.current) {
+        const scrollProgress = effectiveScroll / maxScroll
+        // Start moving down at 80% scroll progress
+        if (scrollProgress >= 0.8) {
+          const fadeProgress = (scrollProgress - 0.8) / 0.2 // 0 to 1 over the last 20%
+          const translateY = fadeProgress * 100 // Move down by 100px
+          const opacity = 1 - fadeProgress // Fade out
+          scrollIndicatorRef.current.style.transform = `translate(-50%, ${translateY}px)`
+          scrollIndicatorRef.current.style.opacity = opacity
+        } else {
+          scrollIndicatorRef.current.style.transform = 'translate(-50%, 0)'
+          scrollIndicatorRef.current.style.opacity = '1'
+        }
+      }
+    }
 
-  /*
-    Events starts coming up when user is
-    ~60% through the page
-  */
-  const eventsY = useTransform(
-    scrollYProgress,
-    [0.55, 0.75],
-    ['100%', '0%']
-  );
-
+    window.addEventListener('scroll', handleScroll)
+    handleScroll() // Initialize positions
+    
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   return (
-    <div className="app-wrapper">
-      <div className="bg-layer">
-        <FloatingLines
-        linesGradient={["#34D399", "#06B6D4", "#8B5CF6", "#afacac"]}
-        // Green → Cyan → Purple → Pink
-          enabledWaves={['middle', 'bottom']}
-          lineCount={[15, 15]}
-          lineDistance={[8,8]}
-          bottomWavePosition={{ x: 0, y: -1.5, rotate: 1.85 }}
-          middleWavePosition={{ x: 2, y: 1.5, rotate: 1.85 }}
-          animationSpeed={3.3}
-          parallaxStrength={0.5}
-          interactive={true}
-          bendStrength={-3}
-        />
-      </div>
 
-
-        {showRegister && <RegisterForm onClose={closeRegister} />}
-
-
-      <div className="content-layer">
-        <main className="container">
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <>
-          {/* Hero Section */}
-          <section className="about-hero">
-            <div className="logo-placeholder" style={{ marginBottom: '20px', fontSize: '2rem' }}>
-              <strong>&lt;/&gt; E-TAN</strong>
+    
+    <div className="app-container">
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+            {/* Static sky background */}
+            <div className="sky-layer">
+              <img src={sky} alt="Sky background" />
             </div>
-            <h1>About <span>E-TAN</span></h1>
-            <p className="subtitle">Empowering students to create meaningful change through technology</p>
-          </section>
 
-          {/* About Content Grid */}
-          <div className="about-container">
-            <div className="about-grid">
-              <div className="info-column">
-                <div className="card mission-card">
-                  <div className="card-header-row">
-                    <div className="card-icon blue-icon">🎯</div>
-                    <h3>Our Mission</h3>
-                  </div>
-                  <p className="card-text-indented">To leverage technological advancements to address and solve pressing social issues, creating a better tomorrow through innovation and collaboration.</p>
-                </div>
-
-                <div className="card values-card">
-                  <div className="card-header-row">
-                    <div className="card-icon orange-icon">💟</div>
-                    <h3>What We Stand For</h3>
-                  </div>
-                  <p className="card-text-indented">We believe in the power of technology to drive social inclusion and positive change. Every project we undertake aims to make a meaningful impact in society.</p>
-                </div>
-              </div>
-
-              <div className="goals-column">
-                <div className="card goals-card">
-                  <div className="card-header">
-                    <span className="small-icon">📈</span>
-                    <h3>Our Goals</h3>
-                  </div>
-                  <ul className="goals-list">
-                    <li><span>1</span> Develop innovative tech-based solutions that address real-world social challenges</li>
-                    <li><span>2</span> Raise awareness about pressing social issues through technology-driven campaigns</li>
-                    <li><span>3</span> Foster a collaborative community where students can learn, innovate, and create impact together</li>
-                  </ul>
-                </div>
-
-                <div className="stats-row">
-                  <div className="stat-box blue-bg">
-                    <h2>100+</h2>
-                    <p>Active Members</p>
-                  </div>
-                  <div className="stat-box orange-bg">
-                    <h2>20+</h2>
-                    <p>Projects Launched</p>
-                  </div>
-                </div>
-              </div>
+            {/* E-TAN Text - starts at center, moves up on scroll */}
+            <div className="text-layer" ref={textRef}>
+              <img src={etan_text} alt="E-TAN Text" />
             </div>
-          </div>
-          {/* Scroll spacer to drive Events reveal */}
-          <div style={{ height: '45vh' }} />
 
-
-          {/* Upcoming Events Section */}
-          <motion.section
-            className="events-overlay"
-            style={{ y: eventsY }}
-          >
-            <div className="events-inner">
-              <div className="section-header">
-
-                <h1>Upcoming <span>Events</span></h1>
-                <p className="subtitle">
-                  Join us for exciting workshops, hackathons, and networking opportunities
-                </p>
-              </div>
-
-              <div className="events-grid">
-                <div className="event-card border-blue">
-                  <div className="event-date">📅 December 15, 2025</div>
-                  <h3>Tech Workshop: AI & Machine Learning</h3>
-                  <p>Hands-on workshop exploring the fundamentals of AI and ML applications in social impact.</p>
-                  <div className="event-card-footer">
-                    <div className="event-details">
-                      <span>🕒 2:00 PM - 5:00 PM</span>
-                      <span>📍 SFIT Campus, Lab 301</span>
-                    </div>
-                    <button className="btn-event-blue">Register Now →</button>
-                  </div>
-                </div>
-
-                <div className="event-card border-cyan">
-                  <div className="event-date">📅 January 20, 2026</div>
-                  <h3>Hackathon: Code for Change</h3>
-                  <p>Build innovative solutions to real-world problems in this 12-hour coding marathon.</p>
-                  <div className="event-card-footer">
-                    <div className="event-details">
-                      <span>🕒 9:00 AM - 9:00 PM</span>
-                      <span>📍 SFIT Main Auditorium</span>
-                    </div>
-                    <button className="btn-event-cyan">Register Now →</button>
-                  </div>
-                </div>
-
-                <div className="event-card border-red">
-                  <div className="event-date">📅 February 5, 2026</div>
-                  <h3>Guest Lecture: Tech for Social Good</h3>
-                  <p>Industry experts share insights on leveraging technology for social impact.</p>
-                  <div className="event-card-footer">
-                    <div className="event-details">
-                      <span>🕒 4:00 PM - 6:00 PM</span>
-                      <span>📍 Virtual Event</span>
-                    </div>
-                    <button className="btn-event-red">Register Now →</button>
-                  </div>
-                </div>
-
-                <div className="event-card border-blue">
-                  <div className="event-date">📅 February 18, 2026</div>
-                  <h3>Project Showcase & Demo Day</h3>
-                  <p>Present your innovative projects to industry leaders and potential investors.</p>
-                  <div className="event-card-footer">
-                    <div className="event-details">
-                      <span>🕒 3:00 PM - 7:00 PM</span>
-                      <span>📍 SFIT Innovation Hub</span>
-                    </div>
-                    <button className="btn-event-blue">Register Now →</button>
-                  </div>
-                </div>
-
-                <div className="event-card border-cyan">
-                  <div className="event-date">📅 March 10, 2026</div>
-                  <h3>Web Development Bootcamp</h3>
-                  <p>Intensive 3-day bootcamp covering modern web technologies and frameworks.</p>
-                  <div className="event-card-footer">
-                    <div className="event-details">
-                      <span>🕒 10:00 AM - 6:00 PM</span>
-                      <span>📍 SFIT Computer Lab</span>
-                    </div>
-                    <button className="btn-event-cyan">Register Now →</button>
-                  </div>
-                </div>
-              </div>
-
-              <div style={{ height: '15vh' }} />
+            {/* Building - starts below viewport, rises up on scroll */}
+            <div className="building-layer" ref={buildingRef}>
+              <img src={sfit_build_nobkg} alt="Building" />
             </div>
-          </motion.section>
-          </>
-              }
-              />
-              
-          <Route path="/team" element={<Team />} />
+
+            {/* Scroll indicator */}
+            <div className="scroll-indicator" ref={scrollIndicatorRef}>
+              <p>↓ Scroll Down ↓</p>
+            </div>
+            </>//home Route closed here
+            }/>
+
+            <Route path="/team" element={<Team />} />
           </Routes>
-        </main>
-
-        {/* The Floating Dock */}
-        <Dock items={navItems} />
-      </div>
+      
+      {/* Left Dock - Navigation */}
+      <Dock items={navItems} position="left" />
+      
+      {/* Right Dock - Contact/Social */}
+      <Dock items={contactItems} position="right" />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
