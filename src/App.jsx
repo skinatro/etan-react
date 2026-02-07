@@ -45,6 +45,9 @@ function App() {
       // Clamp scroll value
       const effectiveScroll = Math.min(scrolled, maxScroll)
       
+      // Detect mobile device
+      const isMobile = window.innerWidth <= 768
+      
       // Move building up from bottom as user scrolls
       if (buildingRef.current) {
         // Start from bottom (translateY(100%)) and move to final position
@@ -53,11 +56,17 @@ function App() {
         buildingRef.current.style.transform = `translateX(-50%) translateY(${buildingTranslate}%)`
       }
       
-      // Move text up (but less than building) while keeping it centered
+      // Move text - DOWN on mobile (to go behind building), UP on desktop
       if (textRef.current) {
-        // Text moves up but not as much as building
-        const textTranslate = -(effectiveScroll * 0.55) // Adjust multiplier for text speed
-        textRef.current.style.transform = `translate(-50%, calc(-50% + ${textTranslate}px))`
+        if (isMobile) {
+          // On mobile: move text DOWN so bottom goes behind building
+          const textTranslate = (effectiveScroll * 0.3) // Move down (positive value)
+          textRef.current.style.transform = `translate(-50%, calc(-50% + ${textTranslate}px))`
+        } else {
+          // On desktop: move text up but not as much as building
+          const textTranslate = -(effectiveScroll * 0.55) // Move up (negative value)
+          textRef.current.style.transform = `translate(-50%, calc(-50% + ${textTranslate}px))`
+        }
       }
       
       // Move scroll indicator down and fade out when scrolled ~80-90%
@@ -78,9 +87,13 @@ function App() {
     }
 
     window.addEventListener('scroll', handleScroll)
+    window.addEventListener('resize', handleScroll) // Re-calculate on resize/orientation change
     handleScroll() // Initialize positions
     
-    return () => window.removeEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
+    }
   }, [])
 
   return (
