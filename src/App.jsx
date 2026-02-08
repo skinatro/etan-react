@@ -9,7 +9,6 @@ import Team from "./components/team-page/Team";
 import Event from "./components/Events-page/Events";
 import About from "./components/about-page/About";
 import AlbumGallery from './components/gallery-stack/AlbumGallery'; // Correct path
-import About from './components/about-page/About';
 import { Routes, Route, useNavigate } from "react-router-dom";
 
 import {
