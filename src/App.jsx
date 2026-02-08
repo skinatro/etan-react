@@ -7,6 +7,7 @@ import Dock from './components/dock/dock';
 import Store from './components/store-page/Store';
 import Team from "./components/team-page/Team";
 import Event from "./components/Events-page/Events";
+import About from "./components/about-page/About";
 import AlbumGallery from './components/gallery-stack/AlbumGallery'; // Correct path
 import { Routes, Route, useNavigate } from "react-router-dom";
 
@@ -34,6 +35,7 @@ function App() {
     { icon: <VscFiles size={22} />, label: 'Gallery',  onClick: () => navigate("/gallery") },
     { icon: <VscOrganization size={22} />, label: 'Team', onClick: () => navigate("/team") },
     { icon: <RiStore2Line size={22} />, label: 'Store', onClick: () => navigate("/store") },
+    { icon: <img src={"/etan-logo-removebg-preview.png"} alt="E-TAN Logo" style={{ width: 50, height: 50 }} />, label: 'E-TAN', onClick: () => navigate("/about") },
   ];
 
   // Right dock - Contact/Social items
@@ -145,6 +147,7 @@ function App() {
         <Route path="/store" element={<Store />} />
         <Route path="/gallery" element={<AlbumGallery />} />
         <Route path="/events" element={<Event />} />
+        <Route path="/about" element={<About />} />
       </Routes>
       
       {/* Desktop Docks - Hidden on mobile */}
