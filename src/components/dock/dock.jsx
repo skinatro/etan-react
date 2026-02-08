@@ -76,7 +76,7 @@ export default function Dock({
   magnification = 80,
   distance = 150,
   panelWidth = 70,
-  baseItemSize = 60
+  baseItemSize = 50,
 }) {
   const mouseY = useMotionValue(Infinity);
   const isHovered = useMotionValue(0);

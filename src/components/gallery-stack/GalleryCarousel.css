@@ -1,10 +1,7 @@
 .carousel-container {
   position: relative;
   width: 100%;
-<<<<<<< HEAD
   max-width: 100vw;
-=======
->>>>>>> b6e574867c48814d2dfce8788167ff46790477a2
   height: 85vh;
   overflow: hidden;
   background: radial-gradient(circle at 50% 30%, #2a2a2a 0%, #111 35%, #070707 65%, #000 100%);
@@ -14,10 +11,7 @@
   --frame-width: min(1200px, 92vw);
   --frame-height: 62vh;
   --card-size: 320px;
-<<<<<<< HEAD
   box-sizing: border-box;
-=======
->>>>>>> b6e574867c48814d2dfce8788167ff46790477a2
 }
 
 .carousel-container::before {
@@ -51,10 +45,7 @@
   padding: 36px 26px 50px;
   display: flex;
   align-items: center;
-<<<<<<< HEAD
   box-sizing: border-box;
-=======
->>>>>>> b6e574867c48814d2dfce8788167ff46790477a2
 }
 
 .carousel-scroller {
@@ -220,10 +211,7 @@
   .carousel-container {
     --frame-height: 58vh;
     --card-size: 230px;
-<<<<<<< HEAD
     padding-bottom: 100px; /* Space for mobile bottom nav */
-=======
->>>>>>> b6e574867c48814d2dfce8788167ff46790477a2
   }
 
   .carousel-card {
@@ -278,8 +266,4 @@
   .carousel-track {
     padding: 0 28vw;
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> b6e574867c48814d2dfce8788167ff46790477a2

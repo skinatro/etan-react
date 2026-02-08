@@ -5,9 +5,8 @@ import sky from './assets/home-page/sky.jpg'
 import etan_text from './assets/home-page/etan-text.png'
 import Dock from './components/dock/dock';
 import Store from './components/store-page/Store';
-import Store from './components/store-page/Store';
 import Team from "./components/team-page/Team";
-import AlbumGallery from './components/gallery-stack/AlbumGallery'; // Correct path
+import Event from "./components/Events-page/Events";
 import AlbumGallery from './components/gallery-stack/AlbumGallery'; // Correct path
 import { Routes, Route, useNavigate } from "react-router-dom";
 
@@ -16,8 +15,8 @@ import {
   VscOrganization
 } from 'react-icons/vsc';
 
-import { FaInstagram, FaLinkedin } from 'react-icons/fa';
-import { MdEmail, MdLocationOn } from 'react-icons/md';
+import { FaInstagram, FaLinkedin,FaGithub } from 'react-icons/fa';
+import { MdLocationOn } from 'react-icons/md';
 import { RiStore2Line } from "react-icons/ri";
 
 
@@ -31,7 +30,7 @@ function App() {
 
   const navItems = [
     { icon: <VscHome size={22} />, label: 'Home', onClick: () => navigate("/") },
-    { icon: <VscCalendar size={22} />, label: 'Events', onClick: () => console.log('Events clicked') },
+    { icon: <VscCalendar size={22} />, label: 'Events', onClick: () => navigate("/events") },
     { icon: <VscFiles size={22} />, label: 'Gallery',  onClick: () => navigate("/gallery") },
     { icon: <VscOrganization size={22} />, label: 'Team', onClick: () => navigate("/team") },
     { icon: <RiStore2Line size={22} />, label: 'Store', onClick: () => navigate("/store") },
@@ -41,8 +40,8 @@ function App() {
   const contactItems = [
     { icon: <FaInstagram size={22} />, label: 'Instagram', onClick: () => window.open('https://www.instagram.com/etan_sfit/', '_blank') },
     { icon: <FaLinkedin size={22} />, label: 'LinkedIn', onClick: () => window.open('https://www.linkedin.com/company/etan-sfit/', '_blank') },
-    { icon: <MdEmail size={22} />, label: 'Email', onClick: () => window.location.href = 'mailto:etan@sfit.ac.in' },
-    { icon: <MdLocationOn size={22} />, label: 'Location', onClick: () => window.open('https://maps.app.goo.gl/XV3PUBU3ASCFC6Tz9?g_st=aw', '_blank') },
+    { icon: <FaGithub size={22} />, label: 'GitHub', onClick: () => window.open('https://github.com/etan-sfit', '_blank') },
+    { icon: <MdLocationOn size={22} />, label: 'Location', onClick:  () => window.open('https://goo.gl/maps/1Zy7n2hLZz5jvXGg6', '_blank') },
   ];
 
   const handleMobileNavClick = (item) => {
@@ -145,7 +144,7 @@ function App() {
         <Route path="/team" element={<Team />} />
         <Route path="/store" element={<Store />} />
         <Route path="/gallery" element={<AlbumGallery />} />
-
+        <Route path="/events" element={<Event />} />
       </Routes>
       
       {/* Desktop Docks - Hidden on mobile */}
