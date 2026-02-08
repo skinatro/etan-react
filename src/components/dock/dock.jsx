@@ -1,16 +1,16 @@
 'use client';
 
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
-import { Children, cloneElement, useEffect, useMemo, useRef, useState } from 'react';
+import { Children, cloneElement, useEffect, useRef, useState } from 'react';
 import './dock.css';
 
-function DockItem({ children, className = '', onClick, mouseX, spring, distance, magnification, baseItemSize }) {
+function DockItem({ children, className = '', onClick, mouseY, spring, distance, magnification, baseItemSize, position }) {
   const ref = useRef(null);
   const isHovered = useMotionValue(0);
 
-  const mouseDistance = useTransform(mouseX, val => {
-    const rect = ref.current?.getBoundingClientRect() ?? { x: 0, width: baseItemSize };
-    return val - rect.x - baseItemSize / 2;
+  const mouseDistance = useTransform(mouseY, val => {
+    const rect = ref.current?.getBoundingClientRect() ?? { y: 0, height: baseItemSize };
+    return val - rect.y - rect.height / 2;
   });
 
   const targetSize = useTransform(mouseDistance, [-distance, 0, distance], [baseItemSize, magnification, baseItemSize]);
@@ -29,12 +29,12 @@ function DockItem({ children, className = '', onClick, mouseX, spring, distance,
       tabIndex={0}
       role="button"
     >
-      {Children.map(children, child => cloneElement(child, { isHovered }))}
+      {Children.map(children, child => cloneElement(child, { isHovered, position }))}
     </motion.div>
   );
 }
 
-function DockLabel({ children, className = '', ...rest }) {
+function DockLabel({ children, className = '', position = 'left', ...rest }) {
   const { isHovered } = rest;
   const [isVisible, setIsVisible] = useState(false);
 
@@ -45,16 +45,17 @@ function DockLabel({ children, className = '', ...rest }) {
     return () => unsubscribe();
   }, [isHovered]);
 
+  const animationX = position === 'right' ? -10 : 10;
+
   return (
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, y: 0 }}
-          animate={{ opacity: 1, y: -10 }}
-          exit={{ opacity: 0, y: 0 }}
+          initial={{ opacity: 0, x: 0 }}
+          animate={{ opacity: 1, x: animationX }}
+          exit={{ opacity: 0, x: 0 }}
           transition={{ duration: 0.2 }}
           className={`dock-label ${className}`}
-          style={{ x: '-50%' }}
         >
           {children}
         </motion.div>
@@ -70,28 +71,29 @@ function DockIcon({ children, className = '' }) {
 export default function Dock({
   items,
   className = '',
+  position = 'left', // 'left' or 'right'
   spring = { mass: 0.1, stiffness: 150, damping: 12 },
   magnification = 80,
   distance = 150,
-  panelHeight = 70,
-  baseItemSize = 50
+  panelWidth = 70,
+  baseItemSize = 60
 }) {
-  const mouseX = useMotionValue(Infinity);
+  const mouseY = useMotionValue(Infinity);
   const isHovered = useMotionValue(0);
 
   return (
-    <div className="dock-outer">
+    <div className={`dock-outer dock-${position}`}>
       <motion.div
-        onMouseMove={({ pageX }) => {
+        onMouseMove={({ clientY }) => {
           isHovered.set(1);
-          mouseX.set(pageX);
+          mouseY.set(clientY);
         }}
         onMouseLeave={() => {
           isHovered.set(0);
-          mouseX.set(Infinity);
+          mouseY.set(Infinity);
         }}
         className={`dock-panel ${className}`}
-        style={{ height: panelHeight }}
+        style={{ width: panelWidth }}
         role="toolbar"
       >
         {items.map((item, index) => (
@@ -99,11 +101,12 @@ export default function Dock({
             key={index}
             onClick={item.onClick}
             className={item.className}
-            mouseX={mouseX}
+            mouseY={mouseY}
             spring={spring}
             distance={distance}
             magnification={magnification}
             baseItemSize={baseItemSize}
+            position={position}
           >
             <DockIcon>{item.icon}</DockIcon>
             <DockLabel>{item.label}</DockLabel>

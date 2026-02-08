@@ -1,0 +1,254 @@
+/* threedeffect.css - Enhanced 3D Card Effect Styles with Image Zoom */
+
+/* ========================================
+   BASE 3D CONFIGURATION
+   ======================================== */
+* {
+  box-sizing: border-box;
+}
+
+/* Base card container with strong perspective */
+.card-perspective-wrapper {
+  perspective: 1000px;
+  perspective-origin: center center;
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+/* ========================================
+   3D TRANSFORM PRESERVATION
+   ======================================== */
+[style*="preserve-3d"],
+[style*="perspective"],
+.card-3d-inner,
+.card-body-3d,
+.card-item-3d {
+  transform-style: preserve-3d !important;
+  -webkit-transform-style: preserve-3d !important;
+}
+
+/* ========================================
+   PERFORMANCE OPTIMIZATIONS
+   ======================================== */
+[style*="rotateY"],
+[style*="rotateX"],
+[style*="translateZ"],
+.card-3d-inner {
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-origin: center center;
+}
+
+/* ========================================
+   ENHANCED 3D CARD STATES
+   ======================================== */
+
+/* Default state - subtle shadow */
+.card-3d-inner {
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+  transition: filter 0.3s ease-out;
+}
+
+/* Hovering state - dramatic shadow and glow */
+.card-3d-inner.is-hovering {
+  filter: 
+    drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5))
+    drop-shadow(0 0 30px rgba(6, 182, 212, 0.2));
+}
+
+/* Add glow effect to cards when hovering */
+.card-3d-inner.is-hovering .card {
+  box-shadow: 
+    0 25px 60px rgba(0, 0, 0, 0.4),
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 0 40px rgba(6, 182, 212, 0.15);
+}
+
+/* ========================================
+   LAYERED 3D DEPTH EFFECTS
+   ======================================== */
+
+/* Create depth for different card elements */
+.card-item-3d {
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Hover state for individual items */
+.card-3d-inner.is-hovering .card-item-3d {
+  transform: translateZ(20px);
+}
+
+/* ========================================
+   IMAGE ZOOM EFFECT
+   ======================================== */
+
+/* Ensure image containers have overflow hidden */
+.image-box,
+.card-item-3d .image-box,
+.card-body-3d .image-box {
+  overflow: hidden !important;
+  position: relative;
+}
+
+/* Image base styling */
+.card-3d-inner img,
+.card-body-3d img,
+.image-box img {
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ZOOM ON HOVER - Primary effect */
+.card-3d-inner.is-hovering img,
+.card-3d-inner.is-hovering .image-box img {
+  transform: scale(1.15) !important;
+}
+
+/* Keep existing 3D transforms for image containers */
+.card-3d-inner.is-hovering .card-item-3d.w-full {
+  transform: translateZ(100px);
+}
+
+/* Ensure images still scale within their 3D context */
+.card-3d-inner.is-hovering .card-item-3d img {
+  transform: scale(1.15);
+}
+
+/* ========================================
+   PREVENT INTERACTION BLOCKING
+   ======================================== */
+
+/* Prevent images and child elements from blocking mouse events */
+.team-grid img,
+.card-3d-inner img {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Ensure clickable elements remain interactive */
+.card-body-3d a,
+.card-body-3d button {
+  pointer-events: auto;
+  position: relative;
+  z-index: 10;
+}
+
+/* ========================================
+   ENHANCED VISUAL EFFECTS
+   ======================================== */
+
+/* Add subtle shine effect on hover */
+.card-3d-inner.is-hovering::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.03) 45%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 55%,
+    transparent 60%
+  );
+  pointer-events: none;
+  animation: shine 3s ease-in-out infinite;
+  transform: translateZ(50px);
+  z-index: 10;
+}
+
+@keyframes shine {
+  0%, 100% {
+    transform: translateX(-100%) translateY(-100%) translateZ(50px);
+  }
+  50% {
+    transform: translateX(100%) translateY(100%) translateZ(50px);
+  }
+}
+
+/* ========================================
+   RESPONSIVE 3D EFFECTS
+   ======================================== */
+
+/* Reduce 3D intensity on smaller screens */
+@media (max-width: 900px) {
+  .card-perspective-wrapper {
+    perspective: 1500px;
+  }
+  
+  /* Reduce zoom intensity */
+  .card-3d-inner.is-hovering img,
+  .card-3d-inner.is-hovering .image-box img {
+    transform: scale(1.12) !important;
+  }
+}
+
+/* Disable 3D on very small screens to prevent disorientation */
+@media (max-width: 600px) {
+  .card-perspective-wrapper {
+    perspective: none;
+  }
+  
+  .card-3d-inner {
+    transform: none !important;
+  }
+  
+  .card-3d-inner.is-hovering {
+    filter: drop-shadow(0 15px 40px rgba(0, 0, 0, 0.4));
+  }
+  
+  /* Keep zoom but reduce intensity on mobile */
+  .card-3d-inner.is-hovering img,
+  .card-3d-inner.is-hovering .image-box img {
+    transform: scale(1.08) !important;
+  }
+}
+
+/* ========================================
+   TYPOGRAPHY - INTER FONT
+   ======================================== */
+.inter-var {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 
+    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .card-3d-inner,
+  .card-item-3d,
+  .card-3d-inner img {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .card-3d-inner {
+    transform: none !important;
+  }
+  
+  .card-3d-inner.is-hovering img {
+    transform: none !important;
+  }
+}
+
+/* Focus states for keyboard navigation */
+.card-body-3d a:focus,
+.card-body-3d button:focus {
+  outline: 2px solid #06B6D4;
+  outline-offset: 4px;
+  border-radius: 4px;
+}

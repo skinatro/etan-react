@@ -2,141 +2,195 @@
    TEAM PAGE LAYOUT
 ========================= */
 
+/* Background Animation Wrapper */
+.app-wrapper {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: clip;
+  display: flex;
+  flex-direction: column;
+}
+
+.bg-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: auto;
+  filter: brightness(0.8);
+}
+
+/* Content Layer Pass-Through */
+.content-layer {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* IMPORTANT: Enable mouse on ALL interactive elements */
+.content-layer .card,
+.content-layer .team-grid,
+.content-layer .inter-var,
+.content-layer .bg-gray-50 {
+  pointer-events: auto;
+}
+
 .team-page {
-  padding: 60px 40px 100px;
+  padding: 60px 80px 150px;
   color: white;
   min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+  overflow-y: visible;
 }
 
 .team-section {
-  margin-bottom: 120px;
+  margin:0 0 150px;
   text-align: center;
+  width: 100%;
+  max-width: 90vw;
+  position: relative;
+  z-index: 100;
 }
 
 .team-title {
-  font-size: 3rem;
-  margin-bottom: 60px;
+  font-size: 3.5rem;
+  margin: 0 auto 80px;
   font-weight: 700;
   letter-spacing: -0.02em;
+  font-family: 'Orbitron', sans-serif;
+  color: #ffffff;
+  text-shadow: 
+    0 0 10px rgba(255, 255, 255, 0.05),
+    0 0 20px rgba(124, 58, 237, 0.5),
+    0 0 30px rgba(139, 92, 246, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 300px));
-  gap: 40px 30px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 340px));
+  gap: 80px 60px;
   justify-content: center;
-  max-width: 1300px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 0 20px;
+  position: relative;
+  z-index: 100;
+  isolation: isolate;
 }
 
 /* =========================
-   PIXEL TRANSITION CARD
+   3D CARD ADJUSTMENTS
 ========================= */
 
-.pixelated-image-card {
+/* Ensure 3D cards work well in grid */
+.team-grid .inter-var {
   width: 100%;
-  max-width: 300px;
-  height: 360px;
-  position: relative;
-  border-radius: 24px;
-  overflow: hidden;
-  cursor: pointer;
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
-  transition: transform 0.4s ease;
+  max-width: 340px;
   margin: 0 auto;
 }
 
-.pixelated-image-card:hover {
-  transform: translateY(-6px);
-}
-
-.pixelated-image-card > div:first-child {
-  width: 100%;
+/* Make sure images don't block hover events */
+.team-grid img {
   pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
 }
 
-/* =========================
-   DEFAULT + ACTIVE LAYERS
-========================= */
-
-.pixelated-image-card__default,
-.pixelated-image-card__active {
-  position: absolute;
-  inset: 0;
+/* IMAGE BOX - Container with centered, smaller image */
+.team-grid .image-box {
+  position: relative;
   width: 100%;
-  height: 100%;
-}
-
-.pixelated-image-card__default {
-  z-index: 1;
-}
-
-.pixelated-image-card__active {
-  z-index: 2;
-  display: none;
-  background: rgba(2, 6, 23, 0.9);
+  height: 280px;
+  border-radius: 16px;
+  overflow: visible; /* Allow image to expand slightly */
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
+  padding: 0;
 }
 
-/* =========================
-   PIXEL GRID OVERLAY
-========================= */
-
-.pixelated-image-card__pixels {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
-}
-
-.pixelated-image-card__pixel {
-  position: absolute;
-  background: currentColor;
-}
-
-/* =========================
-   IMAGE (DEFAULT STATE)
-========================= */
-
-.team-image {
-  width: 100%;
-  height: 100%;
+/* Image wrapper - centers the image */
+.team-grid .image-box img {
+  width: 85%; /* IMAGE AT 85% WIDTH BY DEFAULT */
+  height: 85%;
   object-fit: cover;
-  border-radius: 20px;
+  border-radius: 12px;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: width, height, box-shadow;
+  display: block;
+  border: 3px solid rgba(102, 126, 234, 0.4);
+  box-shadow: 
+    0 0 30px rgba(102, 126, 234, 0.3),
+    0 0 60px rgba(118, 75, 162, 0.2),
+    inset 0 0 30px rgba(139, 92, 246, 0.1);
 }
 
-/* =========================
-   INFO (HOVER STATE)
-========================= */
-
-.team-info {
-  width: 100%;
+/* HOVER EFFECT - Image expands from 85% to 92% */
+.card-3d-inner.is-hovering .image-box img {
+  width: 100%; /* EXPAND TO 92% ON HOVER */
   height: 100%;
+  border-color: rgba(139, 92, 246, 0.8);
+  box-shadow: 
+    0 0 50px rgba(139, 92, 246, 0.5),
+    0 0 80px rgba(118, 75, 162, 0.3),
+    0 10px 40px rgba(0, 0, 0, 0.3),
+    inset 0 0 40px rgba(139, 92, 246, 0.2);
+}
+
+/* Card body styling  */
+.team-grid .bg-gray-50 {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 400px; 
+  background: rgba(17, 24, 39, 0.6) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(139, 92, 246, 0.2) !important;
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(139, 92, 246, 0.1);
+  transition: all 0.3s ease;
+  padding: 1.5rem !important; 
+  padding-bottom: 1.5rem !important; 
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
+  border-radius: 10px;
 }
 
-.team-info h3 {
-  margin: 0;
-  font-size: 1.25rem;
+.team-grid .bg-gray-50:hover {
+  border-color: rgba(139, 92, 246, 0.4) !important;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    0 0 40px rgba(139, 92, 246, 0.2);
+}
+
+/* Text styling improvements */
+.team-grid .text-xl {
+  font-size: 1.5rem;
   font-weight: 700;
+  background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-top: 1.25rem !important; 
+  margin-bottom: 0.4rem !important; 
+  padding: 0 0.5rem;
 }
 
-.team-info p {
-  margin-top: 8px;
-  font-size: 0.95rem;
-  color: #22d3ee;
+.team-grid .text-sm {
+  font-size: 1rem;
+  color: rgba(200, 200, 200, 0.8) !important;
   font-weight: 500;
+  margin-top: 0.5rem !important; 
+  margin-bottom: 0.5rem !important; 
+  padding: 0 0.5rem 0.5rem; 
 }
 
 /* =========================
@@ -146,24 +200,56 @@
 /* Large Desktop - 4 columns */
 @media (min-width: 1400px) {
   .team-grid {
-    grid-template-columns: repeat(4, 300px);
-    gap: 40px;
+    grid-template-columns: repeat(4, 340px);
+    gap: 80px 70px;
   }
 }
 
-/* Desktop - 3 columns or 4 depending on space */
+/* Desktop - 3 columns */
 @media (min-width: 1025px) and (max-width: 1399px) {
   .team-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 300px));
-    max-width: 1280px;
-    gap: 35px 30px;
+    grid-template-columns: repeat(3, minmax(300px, 340px));
+    max-width: 1200px;
+    gap: 70px 50px;
   }
 }
 
 /* Tablet - 2 columns */
 @media (min-width: 769px) and (max-width: 1024px) {
   .team-page {
-    padding: 80px 30px 80px;
+    padding: 80px 50px 80px;
+  }
+
+  .team-title {
+    font-size: 3rem;
+    margin-bottom: 60px;
+  }
+
+  .team-grid {
+    grid-template-columns: repeat(2, minmax(300px, 340px));
+    gap: 60px 40px;
+    max-width: 800px;
+  }
+  
+  .team-grid .bg-gray-50 {
+    min-height: 370px; /* REDUCED */
+  }
+  
+  .team-grid .image-box {
+    height: 260px;
+  }
+  
+  /* Slightly less expansion on tablet */
+  .card-3d-inner.is-hovering .image-box img {
+    width: 90%;
+    height: 90%;
+  }
+}
+
+/* Mobile - 1 column */
+@media (max-width: 768px) {
+  .team-page {
+    padding: 60px 32px 60px;
   }
 
   .team-title {
@@ -172,57 +258,48 @@
   }
 
   .team-grid {
-    grid-template-columns: repeat(2, minmax(260px, 300px));
-    gap: 30px;
-    max-width: 700px;
-  }
-  
-  .pixelated-image-card {
-    height: 340px;
-  }
-}
-
-/* Mobile - 1 column */
-@media (max-width: 768px) {
-  .team-page {
-    padding: 60px 24px 60px;
-  }
-
-  .team-title {
-    font-size: 2rem;
-    margin-bottom: 50px;
-  }
-
-  .team-grid {
     grid-template-columns: 1fr;
-    gap: 24px;
-    max-width: 320px;
+    gap: 50px;
+    max-width: 360px;
     padding: 0;
   }
 
-  .pixelated-image-card {
+  .team-grid .inter-var {
     max-width: 100%;
-    height: 380px;
+  }
+
+  .team-grid .bg-gray-50 {
+    min-height: 380px; 
   }
   
-  .team-info h3 {
-    font-size: 1.15rem;
+  .team-grid .image-box {
+    height: 280px;
   }
   
-  .team-info p {
-    font-size: 0.9rem;
+  .team-grid .text-xl {
+    font-size: 1.3rem;
+  }
+  
+  .team-grid .text-sm {
+    font-size: 0.95rem;
+  }
+  
+  /* Less expansion on mobile */
+  .card-3d-inner.is-hovering .image-box img {
+    width: 88%;
+    height: 88%;
   }
 }
 
 /* Small Mobile */
 @media (max-width: 480px) {
   .team-page {
-    padding: 50px 20px 50px;
+    padding: 50px 24px 50px;
   }
 
   .team-title {
-    font-size: 1.75rem;
-    margin-bottom: 35px;
+    font-size: 2rem;
+    margin-bottom: 40px;
   }
 
   .team-section {
@@ -230,14 +307,17 @@
   }
 
   .team-grid {
-    max-width: 380px;
-    
-    gap: 20px;
+    max-width: 320px;
+    gap: 40px;
   }
 
-  .pixelated-image-card {
-    height: 360px;
-    width: 280px;
+  .team-grid .bg-gray-50 {
+    min-height: 350px; /* REDUCED */
+    padding: 1.25rem !important;
+  }
+  
+  .team-grid .image-box {
+    height: 240px;
   }
 }
 
@@ -248,16 +328,48 @@
   }
 
   .team-title {
-    font-size: 1.5rem;
-    margin-bottom: 30px;
+    font-size: 1.75rem;
+    margin-bottom: 35px;
   }
 
   .team-grid {
-    max-width: 260px;
+    max-width: 300px;
+    gap: 35px;
   }
 
-  .pixelated-image-card {
-    width:240px;
-    height: 340px;
+  .team-grid .bg-gray-50 {
+    min-height: 330px; 
+    padding: 1rem !important;
   }
+  
+  .team-grid .image-box {
+    height: 220px;
+  }
+}
+/* =========================
+   DISABLE DIAGONAL GLOW EFFECT
+========================= */
+
+/* Disable any diagonal glow or shine effects on cards */
+.team-grid .bg-gray-50::before,
+.team-grid .bg-gray-50::after,
+.team-grid .inter-var::before,
+.team-grid .inter-var::after,
+.team-grid .card-3d-inner::before,
+.team-grid .card-3d-inner::after,
+.card-3d-inner::before,
+.card-3d-inner::after {
+  display: none !important;
+  content: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Ensure overflow is hidden to prevent any glow effects */
+.team-grid .bg-gray-50 {
+  overflow: visible !important;
+}
+
+.team-grid .inter-var {
+  overflow: visible !important;
 }

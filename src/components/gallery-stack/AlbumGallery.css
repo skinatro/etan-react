@@ -1,0 +1,79 @@
+.album-gallery-page {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #0a0a0a, #1a1a1a);
+  overflow: hidden;
+}
+
+.gallery-header {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 5;
+  color: white;
+  pointer-events: none;
+}
+
+.gallery-header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(135deg, #fff, #888);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 2px;
+}
+
+.gallery-header p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 10px 0 0 0;
+  font-weight: 300;
+}
+
+/* Card image styling */
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #050505;
+  border-radius: 6px;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  image-rendering: auto;
+  backface-visibility: hidden;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .gallery-header h1 {
+    font-size: 2rem;
+  }
+
+  .gallery-header p {
+    font-size: 0.9rem;
+  }
+
+  .gallery-header {
+    top: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .gallery-header p {
+    font-size: 0.8rem;
+  }
+
+  .gallery-header {
+    top: 30px;
+  }
+}
