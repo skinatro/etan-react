@@ -7,7 +7,8 @@
   position: relative;
   min-height: 100vh;
   width: 100%;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -29,11 +30,13 @@
   position: relative;
   z-index: 1;
   width: 100%;
+  max-width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
-  margin-left: 15vw;
+  padding: 40px 80px; /* Added horizontal padding to avoid docks */
+  min-height: 100vh; /* Ensures vertical centering */
+  margin: 0 auto; /* Centers horizontally */
 }
 
 .store-container {
@@ -41,6 +44,11 @@
   width: 100%;
   text-align: center;
   animation: fadeInUp 1s ease-out;
+  margin: 0 auto; /* Ensures horizontal centering */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Main Title */
@@ -204,6 +212,10 @@
   .store-subtitle {
     font-size: 1.25rem;
   }
+
+  .store-content {
+    padding: 40px 100px; /* More padding for tablets to avoid docks */
+  }
 }
 
 /* Mobile */
@@ -216,6 +228,10 @@
   .store-subtitle {
     font-size: 1.125rem;
     margin-bottom: 60px;
+  }
+
+  .store-content {
+    padding: 60px 20px; /* Vertical padding to avoid docks at top/bottom */
   }
 
   .email-container {
@@ -245,11 +261,19 @@
   .notify-text {
     font-size: 1rem;
   }
+
+  .store-content {
+    padding: 80px 20px; /* Extra vertical padding for smaller screens */
+  }
 }
 
 /* iPhone SE and smaller */
 @media (max-width: 375px) {
   .store-title {
     font-size: 2rem;
+  }
+
+  .store-content {
+    padding: 100px 15px; /* Maximum vertical padding to avoid docks */
   }
 }
