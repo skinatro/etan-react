@@ -8,7 +8,7 @@
 
 .gallery-header {
   position: absolute;
-  top: 60px;
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
@@ -60,7 +60,7 @@
   }
 
   .gallery-header {
-    top: 40px;
+    top: 15px;
   }
 }
 
@@ -74,6 +74,6 @@
   }
 
   .gallery-header {
-    top: 30px;
+    top: 10px;
   }
 }
