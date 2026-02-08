@@ -8,14 +8,15 @@ import Store from './components/store-page/Store';
 import Team from "./components/team-page/Team";
 import Event from "./components/Events-page/Events";
 import AlbumGallery from './components/gallery-stack/AlbumGallery'; // Correct path
+import About from './components/about-page/About';
 import { Routes, Route, useNavigate } from "react-router-dom";
 
 import {
   VscHome, VscCalendar, VscFiles,
-  VscOrganization
+  VscOrganization, VscInfo
 } from 'react-icons/vsc';
 
-import { FaInstagram, FaLinkedin,FaGithub } from 'react-icons/fa';
+import { FaInstagram, FaLinkedin, FaGithub } from 'react-icons/fa';
 import { MdLocationOn } from 'react-icons/md';
 import { RiStore2Line } from "react-icons/ri";
 
@@ -30,8 +31,9 @@ function App() {
 
   const navItems = [
     { icon: <VscHome size={22} />, label: 'Home', onClick: () => navigate("/") },
+    { icon: <VscInfo size={22} />, label: 'About', onClick: () => navigate("/about") },
     { icon: <VscCalendar size={22} />, label: 'Events', onClick: () => navigate("/events") },
-    { icon: <VscFiles size={22} />, label: 'Gallery',  onClick: () => navigate("/gallery") },
+    { icon: <VscFiles size={22} />, label: 'Gallery', onClick: () => navigate("/gallery") },
     { icon: <VscOrganization size={22} />, label: 'Team', onClick: () => navigate("/team") },
     { icon: <RiStore2Line size={22} />, label: 'Store', onClick: () => navigate("/store") },
   ];
@@ -41,7 +43,7 @@ function App() {
     { icon: <FaInstagram size={22} />, label: 'Instagram', onClick: () => window.open('https://www.instagram.com/etan_sfit/', '_blank') },
     { icon: <FaLinkedin size={22} />, label: 'LinkedIn', onClick: () => window.open('https://www.linkedin.com/company/etan-sfit/', '_blank') },
     { icon: <FaGithub size={22} />, label: 'GitHub', onClick: () => window.open('https://github.com/etan-sfit', '_blank') },
-    { icon: <MdLocationOn size={22} />, label: 'Location', onClick:  () => window.open('https://goo.gl/maps/1Zy7n2hLZz5jvXGg6', '_blank') },
+    { icon: <MdLocationOn size={22} />, label: 'Location', onClick: () => window.open('https://goo.gl/maps/1Zy7n2hLZz5jvXGg6', '_blank') },
   ];
 
   const handleMobileNavClick = (item) => {
@@ -62,17 +64,17 @@ function App() {
 
       const scrolled = window.scrollY
       const maxScroll = window.innerHeight * 0.65
-      
+
       const effectiveScroll = Math.min(scrolled, maxScroll)
-      
+
       const isMobile = window.innerWidth <= 768
-      
+
       if (buildingRef.current) {
         const buildingProgress = effectiveScroll / maxScroll
         const buildingTranslate = 100 - (buildingProgress * 100)
         buildingRef.current.style.transform = `translateX(-50%) translateY(${buildingTranslate}%)`
       }
-      
+
       if (textRef.current) {
         if (isMobile) {
           const textTranslate = (effectiveScroll * 0.28)
@@ -82,7 +84,7 @@ function App() {
           textRef.current.style.transform = `translate(-50%, calc(-50% + ${textTranslate}px))`
         }
       }
-      
+
       if (scrollIndicatorRef.current) {
         const scrollProgress = effectiveScroll / maxScroll
         if (scrollProgress >= 0.8) {
@@ -104,7 +106,7 @@ function App() {
     handleScroll()
     window.addEventListener('resize', handleScroll)
     handleScroll()
-    
+
     return () => {
       window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('resize', handleScroll)
@@ -141,12 +143,13 @@ function App() {
           }
         />
 
+        <Route path="/about" element={<About />} />
         <Route path="/team" element={<Team />} />
         <Route path="/store" element={<Store />} />
         <Route path="/gallery" element={<AlbumGallery />} />
         <Route path="/events" element={<Event />} />
       </Routes>
-      
+
       {/* Desktop Docks - Hidden on mobile */}
       <div className="dock-container">
         <Dock items={navItems} position="left" />
