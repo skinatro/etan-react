@@ -9,6 +9,17 @@ const EventCard = ({ event, isOngoing }) => {
 
   return (
     <div className={`event-card ${borderClass}`}>
+      {/* Event Image */}
+      {event.image && (
+        <div className="event-image-container">
+          <img 
+            src={event.image} 
+            alt={event.title}
+            className="event-image"
+          />
+        </div>
+      )}
+
       {/* Event Date Badge */}
       <div className="event-date">
         📅 {event.date}
