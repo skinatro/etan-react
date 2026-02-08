@@ -149,7 +149,7 @@ function App() {
         <Route path="/store" element={<Store />} />
         <Route path="/gallery" element={<AlbumGallery />} />
         <Route path="/events" element={<Event />} />
-        <Route path="/about" element={<About />} />
+
       </Routes>
 
       {/* Desktop Docks - Hidden on mobile */}
