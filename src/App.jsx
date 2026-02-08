@@ -5,7 +5,9 @@ import sky from './assets/home-page/sky.jpg'
 import etan_text from './assets/home-page/etan-text.png'
 import Dock from './components/dock/dock';
 import Store from './components/store-page/Store';
+import Store from './components/store-page/Store';
 import Team from "./components/team-page/Team";
+import AlbumGallery from './components/gallery-stack/AlbumGallery'; // Correct path
 import AlbumGallery from './components/gallery-stack/AlbumGallery'; // Correct path
 import { Routes, Route, useNavigate } from "react-router-dom";
 
@@ -17,6 +19,7 @@ import {
 import { FaInstagram, FaLinkedin } from 'react-icons/fa';
 import { MdEmail, MdLocationOn } from 'react-icons/md';
 import { RiStore2Line } from "react-icons/ri";
+
 
 function App() {
   const buildingRef = useRef(null)
@@ -87,6 +90,7 @@ function App() {
           const fadeProgress = (scrollProgress - 0.8) / 0.2
           const translateY = fadeProgress * 100
           const opacity = 1 - fadeProgress
+
           scrollIndicatorRef.current.style.transform = `translate(-50%, ${translateY}px)`
           scrollIndicatorRef.current.style.opacity = opacity
         } else {
@@ -97,6 +101,8 @@ function App() {
     }
 
     window.addEventListener('scroll', handleScroll)
+    window.addEventListener('resize', handleScroll)
+    handleScroll()
     window.addEventListener('resize', handleScroll)
     handleScroll()
     
@@ -198,4 +204,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
