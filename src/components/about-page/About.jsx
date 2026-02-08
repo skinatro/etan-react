@@ -1,27 +1,14 @@
 import React from 'react';
 import FloatingLines from '../floating-lines/FloatingLines';
 import './About.css';
-import { motion, useScroll, useTransform } from 'framer-motion';
 
 function About() {
-  const { scrollYProgress } = useScroll();
-
-  /*
-    Events starts coming up when user is
-    ~60% through the page
-  */
-  const eventsY = useTransform(
-    scrollYProgress,
-    [0.55, 0.75],
-    ['100%', '0%']
-  );
-
   return (
     <div className="app-wrapper">
+      {/* Background Layer */}
       <div className="bg-layer">
         <FloatingLines
           linesGradient={["#34D399", "#06B6D4", "#8B5CF6", "#afacac"]}
-          // Green → Cyan → Purple → Pink
           enabledWaves={['middle', 'bottom']}
           lineCount={[15, 15]}
           lineDistance={[8, 8]}
@@ -34,154 +21,104 @@ function About() {
         />
       </div>
 
+      {/* Content Layer */}
       <div className="content-layer">
-        <main className="container">
-          {/* Hero Section */}
-          <section className="about-hero">
-            <div className="logo-placeholder" style={{ marginBottom: '20px', fontSize: '2rem' }}>
-              <strong>&lt;/&gt; E-TAN</strong>
-            </div>
-            <h1>About <span>E-TAN</span></h1>
-            <p className="subtitle">Empowering students to create meaningful change through technology</p>
-          </section>
+        {/* Hero Section */}
+        <section className="about-hero">
+        <div className="logo-container" style={{ marginBottom: '40px' }}>
+          <img 
+            src="/etan-logo.webp" 
+            alt="E-TAN Logo" 
+            style={{ 
+              width: '180px', 
+              height: 'auto',
+              filter: 'drop-shadow(0 0 20px rgba(139, 92, 246, 0.3))'
+            }} 
+          />
+        </div>
+        <h1>About <span>Us</span></h1>
+        <h2 style={{ 
+          fontSize: '1.8rem', 
+          marginTop: '20px', 
+          marginBottom: '30px',
+          fontWeight: '600'
+        }}>
+          E-TAN (EXTC's Tech Application Network) @ SFIT
+        </h2>
+      </section>
 
-          {/* About Content Grid */}
-          <div className="about-container">
-            <div className="about-grid">
-              <div className="info-column">
-                <div className="card mission-card">
-                  <div className="card-header-row">
-                    <div className="card-icon blue-icon">🎯</div>
-                    <h3>Our Mission</h3>
-                  </div>
-                  <p className="card-text-indented">To leverage technological advancements to address and solve pressing social issues, creating a better tomorrow through innovation and collaboration.</p>
-                </div>
+      {/* Main Content */}
+      <div className="about-container">
+        <div className="content-section" style={{ width: '100%', maxWidth: '900px', margin: '0 auto' }}>
+          <div className="card main-description" style={{ padding: '50px' }}>
+            <p style={{ fontSize: '1.1rem', lineHeight: '1.9', marginBottom: '30px', color: 'rgba(255, 255, 255, 0.9)' }}>
+              EXTC's Tech Application Network is a dynamic college committee at St. Francis Institute of Technology (SFIT) dedicated to using technology for social causes. Our mission is to leverage technological advancements to address and solve pressing social issues, creating a meaningful impact on our community and beyond.
+            </p>
+            
+            <p style={{ fontSize: '1.1rem', lineHeight: '1.9', marginBottom: '30px', color: 'rgba(255, 255, 255, 0.9)' }}>
+              At E-TAN, we believe in the power of innovation and collaboration. Our team is composed of passionate students and professionals who are committed to bridging the gap between technology and social causes. Through various projects, workshops, and initiatives, <strong style={{ color: '#fff' }}>we aim to:</strong>
+            </p>
 
-                <div className="card values-card">
-                  <div className="card-header-row">
-                    <div className="card-icon orange-icon">💟</div>
-                    <h3>What We Stand For</h3>
-                  </div>
-                  <p className="card-text-indented">We believe in the power of technology to drive social inclusion and positive change. Every project we undertake aims to make a meaningful impact in society.</p>
-                </div>
-              </div>
-
-              <div className="goals-column">
-                <div className="card goals-card">
-                  <div className="card-header">
-                    <span className="small-icon">📈</span>
-                    <h3>Our Goals</h3>
-                  </div>
-                  <ul className="goals-list">
-                    <li><span>1</span> Develop innovative tech-based solutions that address real-world social challenges</li>
-                    <li><span>2</span> Raise awareness about pressing social issues through technology-driven campaigns</li>
-                    <li><span>3</span> Foster a collaborative community where students can learn, innovate, and create impact together</li>
-                  </ul>
-                </div>
-
-                <div className="stats-row">
-                  <div className="stat-box blue-bg">
-                    <h2>100+</h2>
-                    <p>Active Members</p>
-                  </div>
-                  <div className="stat-box orange-bg">
-                    <h2>20+</h2>
-                    <p>Projects Launched</p>
-                  </div>
-                </div>
-              </div>
+            <div className="goals-section" style={{ marginTop: '30px' }}>
+              <ul style={{ 
+                listStyle: 'none', 
+                padding: 0, 
+                margin: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '20px'
+              }}>
+                <li style={{ 
+                  display: 'flex', 
+                  gap: '15px',
+                  alignItems: 'flex-start',
+                  fontSize: '1.05rem',
+                  lineHeight: '1.8',
+                  color: 'rgba(255, 255, 255, 0.9)'
+                }}>
+                  <span style={{ 
+                    fontWeight: '700', 
+                    color: '#fff',
+                    minWidth: '25px'
+                  }}>1.</span>
+                  <span>Develop and implement tech-based solutions for social challenges.</span>
+                </li>
+                <li style={{ 
+                  display: 'flex', 
+                  gap: '15px',
+                  alignItems: 'flex-start',
+                  fontSize: '1.05rem',
+                  lineHeight: '1.8',
+                  color: 'rgba(255, 255, 255, 0.9)'
+                }}>
+                  <span style={{ 
+                    fontWeight: '700', 
+                    color: '#fff',
+                    minWidth: '25px'
+                  }}>2.</span>
+                  <span>Raise awareness about critical social issues through technology.</span>
+                </li>
+                <li style={{ 
+                  display: 'flex', 
+                  gap: '15px',
+                  alignItems: 'flex-start',
+                  fontSize: '1.05rem',
+                  lineHeight: '1.8',
+                  color: 'rgba(255, 255, 255, 0.9)'
+                }}>
+                  <span style={{ 
+                    fontWeight: '700', 
+                    color: '#fff',
+                    minWidth: '25px'
+                  }}>3.</span>
+                  <span>Foster a community of like-minded individuals dedicated to making a difference.</span>
+                </li>
+              </ul>
             </div>
           </div>
-          {/* Scroll spacer to drive Events reveal */}
-          <div style={{ height: '45vh' }} />
-
-
-          {/* Upcoming Events Section */}
-          <motion.section
-            className="events-overlay"
-            style={{ y: eventsY }}
-          >
-            <div className="events-inner">
-              <div className="section-header">
-
-                <h1>Upcoming <span>Events</span></h1>
-                <p className="subtitle">
-                  Join us for exciting workshops, hackathons, and networking opportunities
-                </p>
-              </div>
-
-              <div className="events-grid">
-                <div className="event-card border-blue">
-                  <div className="event-date">📅 December 15, 2025</div>
-                  <h3>Tech Workshop: AI & Machine Learning</h3>
-                  <p>Hands-on workshop exploring the fundamentals of AI and ML applications in social impact.</p>
-                  <div className="event-card-footer">
-                    <div className="event-details">
-                      <span>🕒 2:00 PM - 5:00 PM</span>
-                      <span>📍 SFIT Campus, Lab 301</span>
-                    </div>
-                    <button className="btn-event-blue">Register Now →</button>
-                  </div>
-                </div>
-
-                <div className="event-card border-cyan">
-                  <div className="event-date">📅 January 20, 2026</div>
-                  <h3>Hackathon: Code for Change</h3>
-                  <p>Build innovative solutions to real-world problems in this 12-hour coding marathon.</p>
-                  <div className="event-card-footer">
-                    <div className="event-details">
-                      <span>🕒 9:00 AM - 9:00 PM</span>
-                      <span>📍 SFIT Main Auditorium</span>
-                    </div>
-                    <button className="btn-event-cyan">Register Now →</button>
-                  </div>
-                </div>
-
-                <div className="event-card border-red">
-                  <div className="event-date">📅 February 5, 2026</div>
-                  <h3>Guest Lecture: Tech for Social Good</h3>
-                  <p>Industry experts share insights on leveraging technology for social impact.</p>
-                  <div className="event-card-footer">
-                    <div className="event-details">
-                      <span>🕒 4:00 PM - 6:00 PM</span>
-                      <span>📍 Virtual Event</span>
-                    </div>
-                    <button className="btn-event-red">Register Now →</button>
-                  </div>
-                </div>
-
-                <div className="event-card border-blue">
-                  <div className="event-date">📅 February 18, 2026</div>
-                  <h3>Project Showcase & Demo Day</h3>
-                  <p>Present your innovative projects to industry leaders and potential investors.</p>
-                  <div className="event-card-footer">
-                    <div className="event-details">
-                      <span>🕒 3:00 PM - 7:00 PM</span>
-                      <span>📍 SFIT Innovation Hub</span>
-                    </div>
-                    <button className="btn-event-blue">Register Now →</button>
-                  </div>
-                </div>
-
-                <div className="event-card border-cyan">
-                  <div className="event-date">📅 March 10, 2026</div>
-                  <h3>Web Development Bootcamp</h3>
-                  <p>Intensive 3-day bootcamp covering modern web technologies and frameworks.</p>
-                  <div className="event-card-footer">
-                    <div className="event-details">
-                      <span>🕒 10:00 AM - 6:00 PM</span>
-                      <span>📍 SFIT Computer Lab</span>
-                    </div>
-                    <button className="btn-event-cyan">Register Now →</button>
-                  </div>
-                </div>
-              </div>
-
-              <div style={{ height: '15vh' }} />
-            </div>
-          </motion.section>
-        </main>
+        </div>
       </div>
+    </div>
     </div>
   );
 }
